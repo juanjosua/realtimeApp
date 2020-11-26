@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Question;
 use Illuminate\Http\Request;
+use App\Http\Resources\QuestionResource;
 
 class QuestionController extends Controller
 {
@@ -14,17 +15,10 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
-    }
+        // return Question::latest()->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        // return each and every data on db using format in QuestionResource
+        return QuestionResource::collection(Question::latest()->get());
     }
 
     /**
@@ -35,7 +29,12 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // because user and question have relationship
+        // we can use auth method to automatically filled user_id field
+        // auth()->user()->question()->create($request->all());
+
+        Question::create($request->all());
+        return response('Created', 200);
     }
 
     /**
@@ -46,18 +45,8 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Question  $question
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Question $question)
-    {
-        //
+        // use QuestionResource to wrap everything with "data" object
+        return new QuestionResource($question);
     }
 
     /**
@@ -80,6 +69,7 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
-        //
+        $question->delete();
+        return response('Deleted', 200);
     }
 }
