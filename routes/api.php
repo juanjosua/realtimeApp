@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReplyController;
+use App\Http\Controllers\LikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,6 @@ Route::apiResource('/category', CategoryController::class);
 
 // because every reply is related to question, we have to get the question
 Route::apiResource('/question/{question}/reply', ReplyController::class);
+
+Route::post('/like/{reply}', [LikeController::class, 'likeIt']);
+Route::delete('/like/{reply}', [LikeController::class, 'unLikeIt']);
