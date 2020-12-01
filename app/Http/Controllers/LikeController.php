@@ -9,6 +9,16 @@ use Illuminate\Http\Request;
 class LikeController extends Controller
 {
     /**
+     * Prevent non authenticated person to like / unlike.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('JWT');
+    }
+
+    /**
      * Like a particular reply.
      *
      * @return \Illuminate\Http\Response
@@ -30,7 +40,7 @@ class LikeController extends Controller
     {
         $reply->like()->where([
           // 'user_id', auth()->id()
-          'user_id' => '1' 
+          'user_id' => '1'
         ])->first()->delete();
     }
 }

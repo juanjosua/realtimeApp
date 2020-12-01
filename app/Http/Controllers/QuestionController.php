@@ -9,6 +9,18 @@ use App\Http\Resources\QuestionResource;
 class QuestionController extends Controller
 {
     /**
+     * Prevent non authenticated person to create question.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        // no one can create question without having the token
+        // non authenticated person can only see the question
+        $this->middleware('JWT', ['except' => ['index', 'show']]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
